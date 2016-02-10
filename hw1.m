@@ -1,5 +1,3 @@
-#!/usr/bin/octave
-
 %% Part 1
 
 % 1-a
@@ -66,6 +64,7 @@ fprintf('\n');
 
 %% Part 5
 mat = rand(3)
-s = sum(transpose(mat))
+s = sum((mat))
 mat = rand(3) ./ transpose(repmat(s, length(mat), 1));
+sum(mat)
 disp(mat)
