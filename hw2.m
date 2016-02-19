@@ -8,7 +8,7 @@ car1 = [12.4 12.6 14.0 12.2 12.5];
 car2 = [12.1 12.0 12.1 12.0 12.9];
 car3 = [12.5 11.9 12.4 15.1 11.8];
 cars = [car1; car2; car3]';
-num_cars = 3;
+num_cars = 5;
 car_nums = 1:3;
 % 1-a
 means = mean(cars);
@@ -30,7 +30,7 @@ fprintf('\n');
 
 % 1-b
 sem = stds ./ sqrt(num_cars);
-t_score = tinv([.025 .975], length(cars));
+t_score = tinv([.025 .975], num_cars-1);
 ci = means + t_score' .* sem;
 
 fprintf('The 95%% confidence interval for car %d is %.2f to %.2f.\n', [car_nums; ci])
