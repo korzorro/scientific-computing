@@ -16,11 +16,19 @@ function collisions = collide(sim_time, num_objects, step_dist)
   particles = init_particles(num_objects, xrange, yrange);
   
   collisions = 0;
+  
+  figure;
   for a = 1:sim_time
     for b = 1:length(particles)
       particles{b} = move_particle(particles{b}, step_dist, xrange, yrange);
     end
-    collisions += count_collisions(particles);
+    points = cell2mat(particles);
+    X = points(1:2:end);
+    Y = points(2:2:end);
+    scatter(X, Y);
+    drawnow;
+    pause(1/20);
+    collisions = collisions + count_collisions(particles);
   end
   
   function count = count_collisions(particles)
