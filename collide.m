@@ -18,16 +18,20 @@ function collisions = collide(sim_time, num_objects, step_dist)
   collisions = 0;
   for a = 1:sim_time
     for b = 1:length(particles)
-      particles{b} = move_particle(particle, step_dist);
+      particles{b} = move_particle(particles{b}, step_dist, xrange, yrange);
     end
     collisions += count_collisions(particles);
   end
-
-
-  function particle = move_particle(particle, step_dist, xrange, yrange)
-    rand_angle = 2*pi*rand;
-    particle(1) += cos(rand_angle) * step_dist
-    particle(2) += sin(rand_angle) * step_dist
+  
+  function count = count_collisions(particles)
+    count = 0;
+    for a = 1:length(particles)-1
+      for b = a+1:length(particles)
+	if is_collision(particles{a}, particles{b}, collision_threshold)
+	  count = count + 1;
+	end
+      end
+    end
   end
   
   function p = init_particles(num_objects, xrange, yrange)
@@ -39,7 +43,26 @@ function collisions = collide(sim_time, num_objects, step_dist)
     end
   end
   
-  function x = is_collision(particle1, particle2)
+  function particle = move_particle(particle, step_dist, xrange, yrange)
+    rand_angle = 2*pi*rand;
+    x = particle(1) + cos(rand_angle) * step_dist;
+    if x < xrange(1)
+       x = xrange(1);
+    end
+    if x > xrange(2)
+      x = xrange(2);
+    end
+    y = particle(2) + sin(rand_angle) * step_dist;
+    if y < yrange(1)
+       y = yrange(1);
+    end
+    if y > yrange(2)
+      y = yrange(2);
+    end
+    particle = [x y];
+  end
+  
+  function x = is_collision(particle1, particle2, collision_threshold)
     if distance(particle1, particle2) < collision_threshold
       x = true;
     else
@@ -50,5 +73,4 @@ function collisions = collide(sim_time, num_objects, step_dist)
   function d = distance(a, b)
     d = sqrt(sum((a - b).^2));
   end
-
 end
